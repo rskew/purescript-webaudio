@@ -6,6 +6,11 @@ module Audio.WebAudio.BaseAudioContext
        , createDynamicsCompressor, createStereoPanner
        ) where
 
+-- | In this library, BaseAudioContext is used as a factory for creating the
+-- | various nodes from an initial audio context.
+-- | In the underlying web-audio API you wpuld not use this interface directly -
+-- | you would use a subclass. In this API, you use it directly.
+
 import Prelude
 
 import Audio.WebAudio.Types
@@ -20,6 +25,7 @@ import Control.Monad.Eff.Console (CONSOLE)
 import Control.Monad.Aff (Aff)
 import Control.Monad.Aff.Compat (EffFnAff, fromEffFnAff)
 import Data.ArrayBuffer.Types (ArrayBuffer)
+
 
 -- | The audio graph whose AudioDestinationNode is routed to a real-time output device
 -- | that produces a signal directed at the user.
@@ -38,6 +44,8 @@ foreign import sampleRate
   :: ∀ eff. AudioContext
   -> (Eff (audio :: AUDIO | eff) Value)
 
+-- | If you want to schedule sounds accurateky, then use The current time from
+-- | AudioContext rather than using the raw JavaScript time.
 foreign import currentTime
   :: ∀ eff. AudioContext
   -> (Eff (audio :: AUDIO | eff) Seconds)
@@ -58,8 +66,10 @@ state ctx = do
       "closed" -> CLOSED
       _ -> CLOSED -- ^avoid making a Partial instance
 
+-- | Suspend the progression of time in an audio context.
 foreign import suspend :: ∀ eff. AudioContext -> Eff (audio :: AUDIO | eff) Unit
 
+-- | Resume the progression of time in an audio context.
 foreign import resume  :: ∀ eff. AudioContext -> Eff (audio :: AUDIO | eff) Unit
 
 -- | Closes the audio context, releasing any system audio resources used by the BaseAudioContext.
@@ -92,7 +102,6 @@ decodeAudioDataAsync
   -> Aff (audio :: AUDIO | eff) AudioBuffer
 decodeAudioDataAsync ctx =
   fromEffFnAff <<< (decodeAudioDataAsyncImpl ctx)
-
 
 -- | Creates an AudioBufferSourceNode.
 foreign import createBufferSource

@@ -164,7 +164,7 @@ foreign import nodeDisconnect  :: ∀ m n eff. RawAudioNode m => RawAudioNode n 
   -> n
   -> (Eff (audio :: AUDIO | eff) Unit)
 
--- | Connect a source Node to a parameter on a destination Node. 
+-- | Connect a source Node to a parameter on a destination Node.
 -- | the String parameter names an audio parameter on the target node, n
 -- | this function connects this audio parameter to node m
 -- |
@@ -179,6 +179,7 @@ foreign import unsafeConnectParam  :: ∀ m n eff. RawAudioNode m => RawAudioNod
   -> String
   -> (Eff (audio :: AUDIO | eff) Unit)
 
+-- | an Audio Node
 data AudioNode =
     Gain GainNode
   | AudioBufferSource AudioBufferSourceNode
