@@ -1,5 +1,8 @@
 # purescript-webaudio
 
+[![Latest release](http://img.shields.io/github/release/adkelley/purescript-webaudio.svg)](https://github.com/adkelley/purescript-webaudio/releases)
+[![Build status](https://travis-ci.org/adkelley/purescript-webaudio.svg?branch=master)](https://travis-ci.org/adkelley/purescript-webaudio)
+
 This is an experimental library for dealing with the HTML5 [Web Audio
 API](https://webaudio.github.io/web-audio-api/)
 
