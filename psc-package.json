@@ -1,0 +1,25 @@
+{
+  "name": "purescript-webaudio",
+  "set": "psc-0.11.7-20180418",
+  "source": "https://github.com/purescript/package-sets.git",
+  "depends": [
+    "arrays",
+    "lists",
+    "foldable-traversable",
+    "math",
+    "maybe",
+    "tuples",
+    "strings",
+    "eff",
+    "aff",
+    "arraybuffer-types",
+    "arraybuffer",
+    "console",
+    "psci-support",
+    "dom",
+    "js-timers",
+    "affjax",
+    "assert",
+    "refs"
+  ]
+}
