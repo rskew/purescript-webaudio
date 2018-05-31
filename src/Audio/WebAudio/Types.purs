@@ -53,6 +53,8 @@ type Value = Number
 -- | Type synonym for time (in seconds) argument
 type Seconds = Number
 
+type OptParam p = { when :: Seconds, offset :: Seconds, duration :: Seconds | p }
+
 
 instance audioNodeAudioBufferSourceNodeconnectParam :: RawAudioNode AudioBufferSourceNode
 instance audioNodeMediaElementAudioSourceNode :: RawAudioNode MediaElementAudioSourceNode

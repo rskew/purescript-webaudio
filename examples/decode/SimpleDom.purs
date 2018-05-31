@@ -1,4 +1,7 @@
-module SimpleDom where
+module SimpleDom (DOMEvent, HttpData(..), HttpMethod(..), ProgressEventType(..), XMLHttpRequest
+                 , class ProgressEventTarget, class ProgressEvent, addProgressEventListener
+                 , progressEventType, makeXMLHttpRequest, open, response, send, setResponseType) where
+
 
 -- Ported necessary components from https://github.com/aktowns/purescript-simple-dom
 -- to run Test03 only

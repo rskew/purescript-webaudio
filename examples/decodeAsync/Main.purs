@@ -2,9 +2,9 @@ module DecodeAsync where
 
 import Prelude
 
-import Audio.WebAudio.AudioBufferSourceNode (setBuffer, startBufferSource)
+import Audio.WebAudio.AudioBufferSourceNode (StartOptions, setBuffer, startBufferSource)
 import Audio.WebAudio.BaseAudioContext (createBufferSource, currentTime, decodeAudioDataAsync, destination, newAudioContext)
-import Audio.WebAudio.Types (AudioContext, AudioBuffer, AUDIO, connect)
+import Audio.WebAudio.Types (AudioContext, AudioBuffer, AUDIO, connect, Seconds)
 import Control.Monad.Aff (Aff, Fiber, launchAff)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
@@ -46,6 +46,9 @@ loadSoundBuffers :: ∀ e.
 loadSoundBuffers ctx fileNames =
   sequential $ traverse (\name -> parallel (loadSoundBuffer ctx name)) fileNames
 
+whenOption :: Seconds → StartOptions
+whenOption sec = { when: Just sec,  offset: Nothing, duration: Nothing }
+
 -- | Play a sound at a sepcified elapsed time
 playSoundAt  :: ∀ eff.
      AudioContext
@@ -65,7 +68,7 @@ playSoundAt ctx mbuffer elapsedTime =
         _ <- connect src dst
         _ <- setBuffer buffer src
         -- // We'll start playing the sound 100 milliseconds from "now"
-        startBufferSource (startTime + elapsedTime + 0.1) src
+        startBufferSource (whenOption (startTime + elapsedTime + 0.1)) src
     _ ->
       pure unit
 

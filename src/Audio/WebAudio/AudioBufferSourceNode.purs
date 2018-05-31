@@ -1,5 +1,5 @@
 module Audio.WebAudio.AudioBufferSourceNode
-  ( setBuffer, startBufferSource, stopBufferSource
+  ( StartOptions, setBuffer, startBufferSource, stopBufferSource
   , loop, setLoop, loopStart, setLoopStart, loopEnd, setLoopEnd  ) where
 
 -- | Audio Buffer Source Node.  This is an audio source consisting of in-memory
@@ -11,16 +11,55 @@ import Prelude
 import Audio.WebAudio.Types (AUDIO, AudioBuffer, AudioBufferSourceNode, Seconds)
 import Audio.WebAudio.Utils (unsafeGetProp, unsafeSetProp)
 import Control.Monad.Eff (Eff)
+import Data.Maybe (Maybe(..))
+
+-- | A record of options to the function startBufferSource
+-- | See Webaudio API AudioBufferSourcenode.start for more information
+-- | https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode/start
+type StartOptions =
+  { when ::     Maybe Seconds
+  , offset ::   Maybe Seconds
+  , duration :: Maybe Seconds
+  }
+
+foreign import startBufferSourceFn4
+  :: ∀ eff. Seconds
+   → Seconds
+   → Seconds
+   → AudioBufferSourceNode
+   → Eff (audio :: AUDIO | eff) Unit
+
+foreign import startBufferSourceFn3
+  :: ∀ eff. Seconds
+   → Seconds
+   → AudioBufferSourceNode
+   → Eff (audio :: AUDIO | eff) Unit
+
+foreign import startBufferSourceFn2
+  :: ∀ eff. Seconds
+   → AudioBufferSourceNode
+   → Eff (audio :: AUDIO | eff) Unit
+
+foreign import startBufferSourceFn1
+  :: ∀ eff. AudioBufferSourceNode
+   → Eff (audio :: AUDIO | eff) Unit
+
+-- | Start playing the AudioBuffer. Match on the
+-- | record `StartOptions` to determine what options
+-- | have been specified by the calling function.
+startBufferSource :: ∀ e. StartOptions → AudioBufferSourceNode → (Eff (audio :: AUDIO | e) Unit)
+startBufferSource { when: Just when, offset: Just offset, duration: Just duration } start =
+  startBufferSourceFn4 when offset duration start
+startBufferSource { when: Just when, offset: Just offset, duration: Nothing } start =
+  startBufferSourceFn3 when offset start
+startBufferSource { when: Just when, offset: Nothing, duration: Nothing } start =
+  startBufferSourceFn2 when start
+startBufferSource { when: _, offset: _, duration: _ } start =
+  startBufferSourceFn1 start
 
 -- | Prime the node with its AudioBuffer.
 foreign import setBuffer
   :: ∀ eff. AudioBuffer
-  -> AudioBufferSourceNode
-  -> (Eff (audio :: AUDIO | eff) Unit)
-
--- | Start playing the AudioBuffer.
-foreign import startBufferSource
-  :: ∀ eff. Seconds
   -> AudioBufferSourceNode
   -> (Eff (audio :: AUDIO | eff) Unit)
 

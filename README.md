@@ -19,6 +19,7 @@ To build the examples perform the following scripts in order:
 
 To run the examples in your browser, perform the following scripts in order:
 1. `npm run exec:example:xx` where xx is the example (siren, gain, decode, decodeAsync)
+
 ## Tests
 
 To build the test suite
