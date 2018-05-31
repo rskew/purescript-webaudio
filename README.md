@@ -9,9 +9,7 @@ API](https://webaudio.github.io/web-audio-api/)
 ## Installation
 Both Bower and the psc-package managers are supported.
 
-  bower install
-  -- OR --
-  psc-package install
+$ bower install  -- OR --  $ psc-package install
   
 ## Documentation
 Module documentation is [published on Pursuit](https://pursuit.purescript.org/packages/purscript-webaudio)
