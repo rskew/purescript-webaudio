@@ -7,7 +7,11 @@ This is an experimental library for dealing with the HTML5 [Web Audio
 API](https://webaudio.github.io/web-audio-api/)
 
 ## Installation
-  bower install purescript-webaudio
+Both Bower and the psc-package managers are supported.
+
+  bower install
+  -- OR --
+  psc-package install
   
 ## Documentation
 Module documentation is [published on Pursuit](https://pursuit.purescript.org/packages/purscript-webaudio)
