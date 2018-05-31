@@ -2,14 +2,13 @@ module DecodeAudio where
 
 import Prelude
 
-import Audio.WebAudio.AudioBufferSourceNode (setBuffer, startBufferSource, StartOptions)
+import Audio.WebAudio.AudioBufferSourceNode (defaultStartOptions, setBuffer, startBufferSource)
 import Audio.WebAudio.BaseAudioContext (createBufferSource, decodeAudioData, destination, newAudioContext)
 import Audio.WebAudio.Types (AudioBuffer, AudioBufferSourceNode, connect, AUDIO)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (warn)
 import DOM (DOM)
 import Data.ArrayBuffer.Types (ArrayBuffer)
-import Data.Maybe (Maybe(..))
 import Partial.Unsafe (unsafePartial)
 import SimpleDom (DOMEvent, HttpData(..), HttpMethod(..), ProgressEventType(..), XMLHttpRequest, addProgressEventListener, makeXMLHttpRequest, open, response, send, setResponseType)
 
@@ -38,9 +37,6 @@ play req ev = do
   connect src dst
   audioData <- response req
   decodeAudioData ctx (toArrayBuffer audioData) (play0 src) warn
-
-defaultStartOptions :: StartOptions
-defaultStartOptions = { when: Nothing, offset: Nothing, duration: Nothing }
 
 play0 :: forall eff. AudioBufferSourceNode
       -> AudioBuffer

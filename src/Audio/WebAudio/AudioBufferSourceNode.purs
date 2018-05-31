@@ -1,5 +1,5 @@
 module Audio.WebAudio.AudioBufferSourceNode
-  ( StartOptions, setBuffer, startBufferSource, stopBufferSource
+  ( StartOptions, defaultStartOptions, setBuffer, startBufferSource, stopBufferSource
   , loop, setLoop, loopStart, setLoopStart, loopEnd, setLoopEnd  ) where
 
 -- | Audio Buffer Source Node.  This is an audio source consisting of in-memory
@@ -44,16 +44,24 @@ foreign import startBufferSourceFn1
   :: ∀ eff. AudioBufferSourceNode
    → Eff (audio :: AUDIO | eff) Unit
 
+
+-- | A convenience function specifying the default parameters
+-- | for the function startBuffersource
+defaultStartOptions :: StartOptions
+defaultStartOptions = { when: Nothing, offset: Nothing, duration: Nothing }
+
 -- | Start playing the AudioBuffer. Match on the
 -- | record `StartOptions` to determine what options
 -- | have been specified by the calling function.
-startBufferSource :: ∀ e. StartOptions → AudioBufferSourceNode → (Eff (audio :: AUDIO | e) Unit)
+startBufferSource :: ∀ e. StartOptions → AudioBufferSourceNode → Eff (audio :: AUDIO | e) Unit
 startBufferSource { when: Just when, offset: Just offset, duration: Just duration } start =
   startBufferSourceFn4 when offset duration start
 startBufferSource { when: Just when, offset: Just offset, duration: Nothing } start =
   startBufferSourceFn3 when offset start
 startBufferSource { when: Just when, offset: Nothing, duration: Nothing } start =
   startBufferSourceFn2 when start
+startBufferSource { when: Nothing, offset: Nothing, duration: Nothing } start =
+  startBufferSourceFn1 start
 startBufferSource { when: _, offset: _, duration: _ } start =
   startBufferSourceFn1 start
 
@@ -71,24 +79,24 @@ foreign import stopBufferSource
 
 -- | Indicate that the AudioBuffer should be replayed from the start once its
 -- | end has been reached.
-loop :: ∀ eff. AudioBufferSourceNode -> (Eff (audio :: AUDIO | eff) Boolean)
+loop :: ∀ eff. AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Boolean
 loop = unsafeGetProp "loop"
 
-setLoop :: ∀ eff. Boolean -> AudioBufferSourceNode -> (Eff (audio :: AUDIO | eff) Unit)
+setLoop :: ∀ eff. Boolean -> AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Unit
 setLoop l n = unsafeSetProp "loop" n l
 
 -- | The time, in seconds, at which playback of the AudioBuffer must begin when
 -- | loop is true (default 0).
-loopStart :: ∀ eff. AudioBufferSourceNode -> (Eff (audio :: AUDIO | eff) Seconds)
+loopStart :: ∀ eff. AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Seconds
 loopStart = unsafeGetProp "loopStart"
 
-setLoopStart :: ∀ eff. Seconds -> AudioBufferSourceNode -> (Eff (audio :: AUDIO | eff) Unit)
+setLoopStart :: ∀ eff. Seconds -> AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Unit
 setLoopStart l n = unsafeSetProp "loopStart" n l
 
 -- | The time, in seconds, at which playback of the AudioBuffer must end when
 -- | loop is true (default 0).
-loopEnd :: ∀ eff. AudioBufferSourceNode -> (Eff (audio :: AUDIO | eff) Seconds)
+loopEnd :: ∀ eff. AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Seconds
 loopEnd = unsafeGetProp "loopEnd"
 
-setLoopEnd :: ∀ eff. Seconds -> AudioBufferSourceNode -> (Eff (audio :: AUDIO | eff) Unit)
+setLoopEnd :: ∀ eff. Seconds -> AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Unit
 setLoopEnd l n = unsafeSetProp "loopEnd" n l
