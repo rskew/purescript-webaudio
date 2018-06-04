@@ -9,35 +9,35 @@ module Audio.WebAudio.AudioParam
 -- | See https://developer.mozilla.org/en-US/docs/Web/API/AudioParam.
 
 import Prelude (Unit)
-import Control.Monad.Eff (Eff)
-import Audio.WebAudio.Types (AudioParam, AUDIO, Value, Seconds)
+import Effect (Effect)
+import Audio.WebAudio.Types (AudioParam, Value, Seconds)
 
 -- | set the value immediately.
 foreign import setValue
-  :: ∀ eff. Value -> AudioParam -> (Eff (audio :: AUDIO | eff) Unit)
+  :: Value -> AudioParam -> Effect Unit
 
 -- | Schedule an instant change to the value at a precise time,
 foreign import setValueAtTime
-  :: ∀ eff. Value -> Seconds -> AudioParam -> (Eff (audio :: AUDIO | eff) Value)
+  :: Value -> Seconds -> AudioParam -> Effect Value
 
 -- | Schedule the start of a change to the value. The change starts at the time
 -- | specified by the first time parameter and exponentially moves towards
 -- | the value given by the target AudioParam. The second time parameter
 -- | defines the exponential decay rate.
 foreign import setTargetAtTime
-  :: ∀ eff. Value -> Seconds -> Seconds -> AudioParam -> (Eff (audio :: AUDIO | eff) Value)
+  :: Value -> Seconds -> Seconds -> AudioParam -> Effect Value
 
 foreign import getValue
-  :: ∀ eff. AudioParam -> (Eff (audio :: AUDIO | eff) Value)
+  :: AudioParam -> Effect Value
 
 -- | Schedule a gradual linear change in the value.
 foreign import linearRampToValueAtTime
-  :: ∀ eff. Value -> Seconds -> AudioParam -> (Eff (audio :: AUDIO | eff) Value)
+  :: Value -> Seconds -> AudioParam -> Effect Value
 
 -- | Schedule a gradual exponential change in the value.
 foreign import exponentialRampToValueAtTime
-  :: ∀ eff. Value -> Seconds -> AudioParam -> (Eff (audio :: AUDIO | eff) Value)
+  :: Value -> Seconds -> AudioParam -> Effect Value
 
 -- | Cancel all scheduled future changes to the audio param.
 foreign import cancelScheduledValues
-  :: ∀ eff. Value -> AudioParam -> (Eff (audio :: AUDIO | eff) Value)
+  :: Value -> AudioParam -> Effect Value

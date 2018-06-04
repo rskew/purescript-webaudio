@@ -10,7 +10,7 @@ import Audio.WebAudio.Types
 import Audio.WebAudio.Utils (unsafeGetProp, unsafeSetProp)
 import Prelude (class Show, class Eq, class Ord, Unit, show, (<$>))
 
-import Control.Monad.Eff (Eff)
+import Effect (Effect)
 
 -- | The filter type selects the filtering algorithm which in turn selects the
 -- | range of frequencies to be filtered.
@@ -48,21 +48,21 @@ readBiquadFilterType "notch"     = Notch
 readBiquadFilterType "allpass"   = Allpass
 readBiquadFilterType _           = Lowpass
 
-filterType :: ∀ eff. BiquadFilterNode -> (Eff (audio :: AUDIO | eff) BiquadFilterType)
+filterType :: ∀ eff. BiquadFilterNode -> Effect BiquadFilterType
 filterType n = readBiquadFilterType <$> unsafeGetProp "type" n
 
-setFilterType :: ∀ eff. BiquadFilterType -> BiquadFilterNode -> (Eff (audio :: AUDIO | eff) Unit)
+setFilterType :: ∀ eff. BiquadFilterType -> BiquadFilterNode -> Effect Unit
 setFilterType t n = unsafeSetProp "type" n (show t)
 
 -- | The frequency in the current filtering algorithm measured in hertz (Hz).
-filterFrequency :: ∀ eff. BiquadFilterNode -> (Eff (audio :: AUDIO | eff) AudioParam)
+filterFrequency :: ∀ eff. BiquadFilterNode -> Effect AudioParam
 filterFrequency = unsafeGetProp "frequency"
 
 -- | The quality (or Q-Factor) represents the degree of resonance exhibited
 -- | by the filter. See https://en.wikipedia.org/wiki/Q_factor.
-quality :: ∀ eff. BiquadFilterNode -> (Eff (audio :: AUDIO | eff) AudioParam)
+quality :: ∀ eff. BiquadFilterNode -> Effect AudioParam
 quality = unsafeGetProp "Q"
 
 -- | The gain used in the current filtering algorithm.
 foreign import gain
-  :: forall eff. BiquadFilterNode -> (Eff (audio :: AUDIO | eff) AudioParam)
+  :: forall eff. BiquadFilterNode -> Effect AudioParam

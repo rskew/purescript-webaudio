@@ -8,9 +8,9 @@ module Audio.WebAudio.AnalyserNode
 -- | Analyser Node.  See https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode.
 
 import Prelude (Unit)
+import Effect (Effect)
 import Data.ArrayBuffer.Types (ByteLength, Uint8Array, Float32Array)
-import Audio.WebAudio.Types (AnalyserNode, AUDIO)
-import Control.Monad.Eff (Eff)
+import Audio.WebAudio.Types (AnalyserNode)
 import Audio.WebAudio.Utils (unsafeGetProp, unsafeSetProp)
 
 -- | The size of the FFT (Fast Fourier Transform) to be used to determine the
@@ -19,53 +19,53 @@ import Audio.WebAudio.Utils (unsafeGetProp, unsafeSetProp)
 -- | its default value is 2048.
 -- | If its value is not a power of 2, or it is outside the specified range,
 -- | the exception INDEX_SIZE_ERR is thrown.
-fftSize :: ∀ eff. AnalyserNode -> (Eff (audio :: AUDIO | eff) ByteLength)
+fftSize :: AnalyserNode → Effect ByteLength
 fftSize n = unsafeGetProp "fftSize" n
 
-setFftSize :: ∀ eff. ByteLength -> AnalyserNode -> (Eff (audio :: AUDIO | eff) Unit)
+setFftSize :: ByteLength → AnalyserNode → Effect Unit
 setFftSize size n = unsafeSetProp "fftSize" n size
 
 -- | Half that of the FFT size. This generally equates to the number of data
 -- | values you will have to play with for the visualization.
-frequencyBinCount :: ∀ eff. AnalyserNode -> (Eff (audio :: AUDIO | eff) ByteLength)
+frequencyBinCount :: AnalyserNode → Effect ByteLength
 frequencyBinCount n = unsafeGetProp "frequencyBinCount" n
 
-setFrequencyBinCount :: ∀ eff. ByteLength -> AnalyserNode -> (Eff (audio :: AUDIO | eff) Unit)
+setFrequencyBinCount :: ByteLength → AnalyserNode → Effect Unit
 setFrequencyBinCount count n = unsafeSetProp "frequencyBinCount" n count
 
 -- | Specifies the minimum value for the range of results when using
 -- | getByteFrequencyData().
-minDecibels :: ∀ eff. AnalyserNode -> (Eff (audio :: AUDIO | eff) Number)
+minDecibels :: AnalyserNode → Effect Number
 minDecibels n = unsafeGetProp "minDecibels" n
 
-setMinDecibels :: ∀ eff. Number -> AnalyserNode -> (Eff (audio :: AUDIO | eff) Unit)
+setMinDecibels :: Number → AnalyserNode → Effect Unit
 setMinDecibels db n = unsafeSetProp "minDecibels" n db
 
 -- | Specifies the maxi0mum value for the range of results when using
 -- | getByteFrequencyData().
-maxDecibels :: ∀ eff. AnalyserNode -> (Eff (audio :: AUDIO | eff) Number)
+maxDecibels :: AnalyserNode → Effect Number
 maxDecibels n = unsafeGetProp "maxDecibels" n
 
-setMaxDecibels :: ∀ eff. Number -> AnalyserNode -> (Eff (audio :: AUDIO | eff) Unit)
+setMaxDecibels :: Number → AnalyserNode → Effect Unit
 setMaxDecibels db n = unsafeSetProp "maxDecibels" n db
 
 -- | The averaging constant with the last analysis frame.
 -- | This makes the transition between values over time smoother.
-smoothingTimeConstant :: ∀ eff. AnalyserNode -> (Eff (audio :: AUDIO | eff) Number)
+smoothingTimeConstant :: AnalyserNode → Effect Number
 smoothingTimeConstant n = unsafeGetProp "smoothingTimeConstant" n
 
-setSmoothingTimeConstant :: ∀ eff. Number -> AnalyserNode -> (Eff (audio :: AUDIO | eff) Unit)
+setSmoothingTimeConstant :: Number → AnalyserNode → Effect Unit
 setSmoothingTimeConstant tc n = unsafeSetProp "smoothingTimeConstant" n tc
 
 
 -- | Copy the current frequency data into the Float32Array.
-foreign import getFloatFrequencyData :: ∀ eff. AnalyserNode -> Float32Array -> (Eff (audio :: AUDIO | eff) Unit)
+foreign import getFloatFrequencyData :: AnalyserNode → Float32Array → Effect Unit
 
 -- | Copy the current frequency data into the Uint8Array.
-foreign import getByteFrequencyData :: ∀ eff. AnalyserNode -> Uint8Array -> (Eff (audio :: AUDIO | eff) Unit)
+foreign import getByteFrequencyData :: AnalyserNode → Uint8Array → Effect Unit
 
 -- | Copy the current waveform, or time-domain, data into the Float32Array.
-foreign import getFloatTimeDomainData :: ∀ eff. AnalyserNode -> Float32Array -> (Eff (audio :: AUDIO | eff) Unit)
+foreign import getFloatTimeDomainData :: AnalyserNode → Float32Array → Effect Unit
 
 -- | Copy the current waveform, or time-domain, data into the Uint8Array.
-foreign import getByteTimeDomainData :: ∀ eff. AnalyserNode -> Uint8Array -> (Eff (audio :: AUDIO | eff) Unit)
+foreign import getByteTimeDomainData :: AnalyserNode → Uint8Array → Effect Unit

@@ -8,19 +8,19 @@ module Audio.WebAudio.ConvolverNode (setBuffer, normalize, isNormalized) where
 -- | See https://developer.mozilla.org/en-US/docs/Web/API/ConvolverNode.
 
 import Prelude (Unit)
-import Control.Monad.Eff (Eff)
-import Audio.WebAudio.Types (AudioBuffer, ConvolverNode, AUDIO)
+import Effect (Effect)
+import Audio.WebAudio.Types (AudioBuffer, ConvolverNode)
 import Audio.WebAudio.Utils (unsafeGetProp, unsafeSetProp)
 
 -- | Set the AudioBuffer of the impulse response.
 foreign import setBuffer
-  :: ∀ eff. AudioBuffer
+  :: AudioBuffer
   -> ConvolverNode
-  -> (Eff (audio :: AUDIO | eff) Unit)
+  -> Effect Unit
 
 -- | If true, the impulse response will be scaled by an equal-power normalization
-normalize :: ∀ eff. Boolean -> ConvolverNode -> (Eff (audio :: AUDIO | eff) Unit)
+normalize :: Boolean -> ConvolverNode -> Effect Unit
 normalize l n = unsafeSetProp "normalize" n l
 
-isNormalized :: ∀ eff. ConvolverNode -> (Eff (audio :: AUDIO | eff) Boolean)
+isNormalized :: ConvolverNode -> Effect Boolean
 isNormalized = unsafeGetProp "normalize"

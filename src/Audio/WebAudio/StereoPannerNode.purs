@@ -4,9 +4,9 @@ module Audio.WebAudio.StereoPannerNode where
 -- | stereo channels.
 -- | See https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode.
 
-import Control.Monad.Eff (Eff)
-import Audio.WebAudio.Types (AudioParam, StereoPannerNode, AUDIO)
+import Effect (Effect)
+import Audio.WebAudio.Types (AudioParam, StereoPannerNode)
 
 -- | The amount of panning to employ.
 foreign import pan
-  :: forall eff. StereoPannerNode -> (Eff (audio :: AUDIO | eff) AudioParam)
+  :: StereoPannerNode -> Effect AudioParam

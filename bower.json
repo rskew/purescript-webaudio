@@ -18,26 +18,26 @@
     "tests"
   ],
   "dependencies": {
-    "purescript-arrays": "^4.2.0",
-    "purescript-foldable-traversable": "^3.6.0",
-    "purescript-lists": "^4.10.0",
-    "purescript-math": "^2.1.0",
-    "purescript-maybe": "^3.0.0",
-    "purescript-tuples": "^4.1.0",
-    "purescript-strings": "^3.3.1",
-    "purescript-eff": "^3.1.0",
-    "purescript-aff": "^4.0.0",
+    "purescript-arrays": "^5.0.0",
+    "purescript-foldable-traversable": "^4.0.0",
+    "purescript-lists": "^5.0.0",
+    "purescript-math": "^2.1.1",
+    "purescript-maybe": "^4.0.0",
+    "purescript-tuples": "^5.0.0",
+    "purescript-strings": "^4.0.0",
+    "purescript-effect": "^2.0.0",
+    "purescript-aff": "^5.0.0",
     "purescript-arraybuffer-types": "^2.0.0",
-    "purescript-arraybuffer": "^6.0.0"
+    "purescript-arraybuffer": "adkelley/purescript-arraybuffer#compiler/0.12"
   },
   "devDependencies": {
-    "purescript-console": "^3.0.0",
-    "purescript-psci-support": "^3.0.0",
-    "purescript-dom": "^4.16.0",
-    "purescript-js-timers": "^3.0.0",
-    "purescript-affjax": "^5.0.0",
-    "purescript-assert": "^3.0.0",
-    "purescript-refs": "^3.0.0"
+    "purescript-console": "^4.0.0",
+    "purescript-psci-support": "^4.0.0",
+    "purescript-web-html": "^1.0.0",
+    "purescript-js-timers": "^4.0.0",
+    "purescript-affjax": "^6.0.0",
+    "purescript-assert": "^4.0.0",
+    "purescript-refs": "^4.1.0"
   },
   "resolutions": {
     "purescript-arraybuffer-types": "^2.0.0"

@@ -8,9 +8,9 @@ module Audio.WebAudio.AudioBufferSourceNode
 
 import Prelude
 
-import Audio.WebAudio.Types (AUDIO, AudioBuffer, AudioBufferSourceNode, Seconds)
+import Audio.WebAudio.Types (AudioBuffer, AudioBufferSourceNode, Seconds)
 import Audio.WebAudio.Utils (unsafeGetProp, unsafeSetProp)
-import Control.Monad.Eff (Eff)
+import Effect (Effect)
 import Data.Maybe (Maybe(..))
 
 -- | A record of options to the function startBufferSource
@@ -23,26 +23,26 @@ type StartOptions =
   }
 
 foreign import startBufferSourceFn4
-  :: ∀ eff. Seconds
+  :: Seconds
    → Seconds
    → Seconds
    → AudioBufferSourceNode
-   → Eff (audio :: AUDIO | eff) Unit
+   → Effect Unit
 
 foreign import startBufferSourceFn3
-  :: ∀ eff. Seconds
+  :: Seconds
    → Seconds
    → AudioBufferSourceNode
-   → Eff (audio :: AUDIO | eff) Unit
+   → Effect Unit
 
 foreign import startBufferSourceFn2
-  :: ∀ eff. Seconds
+  :: Seconds
    → AudioBufferSourceNode
-   → Eff (audio :: AUDIO | eff) Unit
+   → Effect Unit
 
 foreign import startBufferSourceFn1
-  :: ∀ eff. AudioBufferSourceNode
-   → Eff (audio :: AUDIO | eff) Unit
+  :: AudioBufferSourceNode
+   → Effect Unit
 
 
 -- | A convenience function specifying the default parameters
@@ -53,7 +53,7 @@ defaultStartOptions = { when: Nothing, offset: Nothing, duration: Nothing }
 -- | Start playing the AudioBuffer. Match on the
 -- | record `StartOptions` to determine what options
 -- | have been specified by the calling function.
-startBufferSource :: ∀ e. StartOptions → AudioBufferSourceNode → Eff (audio :: AUDIO | e) Unit
+startBufferSource :: StartOptions → AudioBufferSourceNode → Effect Unit
 startBufferSource { when: Just when, offset: Just offset, duration: Just duration } start =
   startBufferSourceFn4 when offset duration start
 startBufferSource { when: Just when, offset: Just offset, duration: Nothing } start =
@@ -67,36 +67,36 @@ startBufferSource { when: _, offset: _, duration: _ } start =
 
 -- | Prime the node with its AudioBuffer.
 foreign import setBuffer
-  :: ∀ eff. AudioBuffer
+  :: AudioBuffer
   -> AudioBufferSourceNode
-  -> (Eff (audio :: AUDIO | eff) Unit)
+  -> Effect Unit
 
 -- | Stop playing the AudioBuffer.
 foreign import stopBufferSource
-  :: ∀ eff. Seconds
+  :: Seconds
   -> AudioBufferSourceNode
-  -> (Eff (audio :: AUDIO | eff) Unit)
+  -> Effect Unit
 
 -- | Indicate that the AudioBuffer should be replayed from the start once its
 -- | end has been reached.
-loop :: ∀ eff. AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Boolean
+loop :: AudioBufferSourceNode -> Effect Boolean
 loop = unsafeGetProp "loop"
 
-setLoop :: ∀ eff. Boolean -> AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Unit
+setLoop :: Boolean -> AudioBufferSourceNode -> Effect Unit
 setLoop l n = unsafeSetProp "loop" n l
 
 -- | The time, in seconds, at which playback of the AudioBuffer must begin when
 -- | loop is true (default 0).
-loopStart :: ∀ eff. AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Seconds
+loopStart :: AudioBufferSourceNode -> Effect Seconds
 loopStart = unsafeGetProp "loopStart"
 
-setLoopStart :: ∀ eff. Seconds -> AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Unit
+setLoopStart :: Seconds -> AudioBufferSourceNode -> Effect Unit
 setLoopStart l n = unsafeSetProp "loopStart" n l
 
 -- | The time, in seconds, at which playback of the AudioBuffer must end when
 -- | loop is true (default 0).
-loopEnd :: ∀ eff. AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Seconds
+loopEnd :: AudioBufferSourceNode -> Effect Seconds
 loopEnd = unsafeGetProp "loopEnd"
 
-setLoopEnd :: ∀ eff. Seconds -> AudioBufferSourceNode -> Eff (audio :: AUDIO | eff) Unit
+setLoopEnd :: Seconds -> AudioBufferSourceNode -> Effect Unit
 setLoopEnd l n = unsafeSetProp "loopEnd" n l

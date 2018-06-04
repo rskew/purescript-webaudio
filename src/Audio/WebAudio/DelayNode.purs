@@ -4,10 +4,10 @@ module Audio.WebAudio.DelayNode (delayTime) where
 -- | data and its propagation to the output.
 -- | See https://developer.mozilla.org/en-US/docs/Web/API/DelayNode.
 
-import Control.Monad.Eff (Eff)
-import Audio.WebAudio.Types (AudioParam, DelayNode, AUDIO)
+import Effect (Effect)
+import Audio.WebAudio.Types (AudioParam, DelayNode)
 import Audio.WebAudio.Utils (unsafeGetProp)
 
 -- | The amount of delay to apply (in seconds).
-delayTime :: ∀ eff. DelayNode -> (Eff (audio :: AUDIO | eff) AudioParam)
+delayTime :: DelayNode -> Effect AudioParam
 delayTime = unsafeGetProp "delayTime"
