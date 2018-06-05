@@ -54,16 +54,16 @@ defaultStartOptions = { when: Nothing, offset: Nothing, duration: Nothing }
 -- | record `StartOptions` to determine what options
 -- | have been specified by the calling function.
 startBufferSource :: StartOptions → AudioBufferSourceNode → Effect Unit
+startBufferSource { when: Nothing, offset: Nothing, duration: Nothing } start =
+  startBufferSourceFn1 start -- |^ this is the default
 startBufferSource { when: Just when, offset: Just offset, duration: Just duration } start =
   startBufferSourceFn4 when offset duration start
 startBufferSource { when: Just when, offset: Just offset, duration: Nothing } start =
   startBufferSourceFn3 when offset start
 startBufferSource { when: Just when, offset: Nothing, duration: Nothing } start =
   startBufferSourceFn2 when start
-startBufferSource { when: Nothing, offset: Nothing, duration: Nothing } start =
-  startBufferSourceFn1 start
 startBufferSource { when: _, offset: _, duration: _ } start =
-  startBufferSourceFn1 start
+  startBufferSourceFn1 start  -- |^ this should probably be an error in the future
 
 -- | Prime the node with its AudioBuffer.
 foreign import setBuffer

@@ -48,21 +48,21 @@ readBiquadFilterType "notch"     = Notch
 readBiquadFilterType "allpass"   = Allpass
 readBiquadFilterType _           = Lowpass
 
-filterType :: ∀ eff. BiquadFilterNode -> Effect BiquadFilterType
+filterType :: BiquadFilterNode -> Effect BiquadFilterType
 filterType n = readBiquadFilterType <$> unsafeGetProp "type" n
 
-setFilterType :: ∀ eff. BiquadFilterType -> BiquadFilterNode -> Effect Unit
+setFilterType :: BiquadFilterType -> BiquadFilterNode -> Effect Unit
 setFilterType t n = unsafeSetProp "type" n (show t)
 
 -- | The frequency in the current filtering algorithm measured in hertz (Hz).
-filterFrequency :: ∀ eff. BiquadFilterNode -> Effect AudioParam
+filterFrequency :: BiquadFilterNode -> Effect AudioParam
 filterFrequency = unsafeGetProp "frequency"
 
 -- | The quality (or Q-Factor) represents the degree of resonance exhibited
 -- | by the filter. See https://en.wikipedia.org/wiki/Q_factor.
-quality :: ∀ eff. BiquadFilterNode -> Effect AudioParam
+quality :: BiquadFilterNode -> Effect AudioParam
 quality = unsafeGetProp "Q"
 
 -- | The gain used in the current filtering algorithm.
 foreign import gain
-  :: forall eff. BiquadFilterNode -> Effect AudioParam
+  :: BiquadFilterNode -> Effect AudioParam
