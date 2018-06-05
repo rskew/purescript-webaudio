@@ -4,10 +4,9 @@ import Prelude
 
 import Audio.WebAudio.AudioBufferSourceNode (defaultStartOptions, setBuffer, startBufferSource)
 import Audio.WebAudio.BaseAudioContext (createBufferSource, decodeAudioData, destination, newAudioContext)
-import Audio.WebAudio.Types (AudioBuffer, AudioBufferSourceNode, connect, AUDIO)
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (warn)
-import DOM (DOM)
+import Audio.WebAudio.Types (AudioBuffer, AudioBufferSourceNode, connect)
+import Effect (Effect)
+import Effect.Console (warn)
 import Data.ArrayBuffer.Types (ArrayBuffer)
 import Partial.Unsafe (unsafePartial)
 import SimpleDom (DOMEvent, HttpData(..), HttpMethod(..), ProgressEventType(..), XMLHttpRequest, addProgressEventListener, makeXMLHttpRequest, open, response, send, setResponseType)
@@ -18,7 +17,7 @@ toArrayBuffer hd =
     case hd of
       (ArrayBufferData a) -> a
 
-main :: forall eff. (Eff (audio :: AUDIO, dom :: DOM | eff) Unit)
+main :: Effect Unit
 main = do
   req <- makeXMLHttpRequest
   open GET "decode-audio.wav" req
@@ -27,9 +26,9 @@ main = do
   send NoData req
   pure unit
 
-play :: forall eff. XMLHttpRequest -- |^ the request object
+play :: XMLHttpRequest -- |^ the request object
      -> DOMEvent -- |^ the load event
-     -> (Eff (audio :: AUDIO, dom :: DOM | eff) Unit)
+     -> Effect Unit
 play req ev = do
   ctx <- newAudioContext
   src <- createBufferSource ctx
@@ -38,9 +37,9 @@ play req ev = do
   audioData <- response req
   decodeAudioData ctx (toArrayBuffer audioData) (play0 src) warn
 
-play0 :: forall eff. AudioBufferSourceNode
+play0 :: AudioBufferSourceNode
       -> AudioBuffer
-      -> (Eff (audio :: AUDIO, dom :: DOM | eff) Unit)
+      -> Effect Unit
 play0 src buf = do
   setBuffer buf src
   startBufferSource defaultStartOptions src
