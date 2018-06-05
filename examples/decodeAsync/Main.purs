@@ -4,45 +4,36 @@ import Prelude
 
 import Audio.WebAudio.AudioBufferSourceNode (StartOptions, setBuffer, startBufferSource)
 import Audio.WebAudio.BaseAudioContext (createBufferSource, currentTime, decodeAudioDataAsync, destination, newAudioContext)
-import Audio.WebAudio.Types (AudioContext, AudioBuffer, AUDIO, connect, Seconds)
-import Control.Monad.Aff (Aff, Fiber, launchAff)
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Class (liftEff)
+import Audio.WebAudio.Types (AudioContext, AudioBuffer, connect, Seconds)
 import Control.Parallel (parallel, sequential)
+import Data.Array ((!!))
 import Data.Either (Either(..))
 import Data.HTTP.Method (Method(..))
-import Data.Traversable (traverse)
 import Data.Maybe (Maybe(..))
-import Data.Array ((!!))
-import Network.HTTP.Affjax (AJAX, affjax, defaultRequest)
+import Data.Traversable (traverse)
+import Effect (Effect)
+import Effect.Aff (Aff, Fiber, launchAff)
+import Effect.Class (liftEffect)
+import Network.HTTP.Affjax (affjax, defaultRequest)
+import Network.HTTP.Affjax.Response as Response
 
 type ElapsedTime = Number
 
 -- | load a single sound buffer resource and decode it
-loadSoundBuffer :: ∀ eff.
-  AudioContext
+loadSoundBuffer
+  :: AudioContext
   -> String
-  -> Aff
-     ( ajax :: AJAX
-     , audio :: AUDIO
-     | eff
-     )
-     AudioBuffer
-loadSoundBuffer ctx fileName = do
-  res <- affjax $ defaultRequest { url = fileName, method = Left GET }
+  -> Aff AudioBuffer
+loadSoundBuffer ctx filename = do
+  res <- affjax Response.arrayBuffer $ defaultRequest { url = filename, method = Left GET }
   buffer <- decodeAudioDataAsync ctx res.response
   pure buffer
 
 -- | load and decode an array of audio buffers from a set of resources
-loadSoundBuffers :: ∀ e.
-  AudioContext
+loadSoundBuffers
+  :: AudioContext
   -> (Array String)
-  -> Aff
-     ( ajax :: AJAX
-     , audio :: AUDIO
-     | e
-     )
-     (Array AudioBuffer)
+  -> Aff (Array AudioBuffer)
 loadSoundBuffers ctx fileNames =
   sequential $ traverse (\name -> parallel (loadSoundBuffer ctx name)) fileNames
 
@@ -50,14 +41,11 @@ whenOption :: Seconds → StartOptions
 whenOption sec = { when: Just sec,  offset: Nothing, duration: Nothing }
 
 -- | Play a sound at a sepcified elapsed time
-playSoundAt  :: ∀ eff.
-     AudioContext
+playSoundAt
+  :: AudioContext
   -> Maybe AudioBuffer
   -> ElapsedTime
-  -> Eff
-      ( audio :: AUDIO
-      | eff )
-      Unit
+  -> Effect Unit
 playSoundAt ctx mbuffer elapsedTime =
   case mbuffer of
     Just buffer ->
@@ -72,26 +60,14 @@ playSoundAt ctx mbuffer elapsedTime =
     _ ->
       pure unit
 
-main :: ∀ eff.
-  Eff
-    ( ajax :: AJAX
-    , audio :: AUDIO
-    | eff
-    )
-    (Fiber
-       ( ajax :: AJAX
-       , audio :: AUDIO
-       | eff
-       )
-       Unit
-    )
+main :: Effect (Fiber Unit)
 main = launchAff $ do
-  ctx <- liftEff newAudioContext
+  ctx <- liftEffect newAudioContext
   buffers <- loadSoundBuffers ctx ["hihat.wav", "kick.wav", "snare.wav"]
-  _ <- liftEff $ playSoundAt ctx (buffers !! 0) 0.0
-  _ <- liftEff $ playSoundAt ctx (buffers !! 1) 0.5
-  _ <- liftEff $ playSoundAt ctx (buffers !! 2) 1.0
-  _ <- liftEff $ playSoundAt ctx (buffers !! 0) 1.5
-  _ <- liftEff $ playSoundAt ctx (buffers !! 1) 2.0
-  _ <- liftEff $ playSoundAt ctx (buffers !! 2) 2.5
+  _ <- liftEffect $ playSoundAt ctx (buffers !! 0) 0.0
+  _ <- liftEffect $ playSoundAt ctx (buffers !! 1) 0.5
+  _ <- liftEffect $ playSoundAt ctx (buffers !! 2) 1.0
+  _ <- liftEffect $ playSoundAt ctx (buffers !! 0) 1.5
+  _ <- liftEffect $ playSoundAt ctx (buffers !! 1) 2.0
+  _ <- liftEffect $ playSoundAt ctx (buffers !! 2) 2.5
   pure unit
