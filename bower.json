@@ -2,6 +2,10 @@
   "name": "purescript-webaudio",
   "version": "0.1.0",
   "description": "A PureScript wrapper for the WebAudio API.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adkelley/purescript-webaudio"
+  },
   "authors": [
     "Chris Waterson <waterson@maubi.net>",
     "Sean Seefried <sean.seefried@gmail.com>",
