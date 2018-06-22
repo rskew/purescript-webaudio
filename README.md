@@ -11,7 +11,7 @@ API](https://webaudio.github.io/web-audio-api/)
 $ bower install
   
 ## Documentation
-Module documentation is [published on Pursuit](https://pursuit.purescript.org/packages/purscript-webaudio)
+Module documentation is [published on Pursuit](https://pursuit.purescript.org/packages/purescript-webaudio)
   
 ## Examples  
 
