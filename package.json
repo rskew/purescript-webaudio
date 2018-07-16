@@ -8,8 +8,9 @@
   },
   "main": "",
   "scripts": {
-    "postinstall": "bower install",
-    "build:clean": "rm -rf dist output examples/*/output test/*/output",
+    "install": "bower install",
+    "install:clean": "rimraf bower_components && rimraf .psc* && rimraf .pulp-cache",
+    "build:clean": "rimraf dist && rimraf output && rimraf examples/*/output && rimraf test/*/output",
     "build": "pulp build",
     "build:example:squareWave": "pulp browserify --main SquareWave --to examples/square-wave/output/bundle.js -I examples/square-wave",
     "exec:example:squareWave": "cd examples/square-wave/ && python -m SimpleHTTPServer 8000",
