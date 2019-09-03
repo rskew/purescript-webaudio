@@ -133,14 +133,14 @@ instance connectableAudioNode :: Connectable AudioNode where
   connect s _ = pure unit  -- you can't connect to source nodes
 
   disconnect s (Gain n) = nodeDisconnect s n
-  disconnect s (Oscillator n) = nodeConnect s n
+  disconnect s (Oscillator n) = nodeDisconnect s n
   disconnect s (BiquadFilter n) = nodeDisconnect s n
   disconnect s (Delay n) = nodeDisconnect s n
   disconnect s (Analyser n) = nodeDisconnect s n
   disconnect s (StereoPanner n) = nodeDisconnect s n
   disconnect s (DynamicsCompressor n) = nodeDisconnect s n
   disconnect s (Convolver n) = nodeDisconnect s n
-  disconnect s (Destination n) = nodeConnect s n
+  disconnect s (Destination n) = nodeDisconnect s n
   disconnect s _ = pure unit -- you can't disconnect from source nodes
 
   connectParam s (Gain n) p = unsafeConnectParam s n p
