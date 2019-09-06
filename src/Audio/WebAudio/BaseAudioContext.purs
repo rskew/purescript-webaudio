@@ -1,6 +1,6 @@
 module Audio.WebAudio.BaseAudioContext
        ( newAudioContext, destination, sampleRate, currentTime, state
-       , suspend, resume, decodeAudioData, decodeAudioDataAsync
+       , suspend, resume, close, decodeAudioData, decodeAudioDataAsync
        , createBufferSource, createGain, createOscillator
        , createAnalyser, createBiquadFilter, createConvolver, createDelay
        , createDynamicsCompressor, createStereoPanner
@@ -38,8 +38,8 @@ foreign import sampleRate
   :: AudioContext
   -> Effect Value
 
--- | If you want to schedule sounds accurateky, then use The current time from
--- | AudioContext rather than using the raw JavaScript time.
+-- | If you want to schedule sounds accurately, then use the current time from
+-- | the AudioContext rather than using the raw JavaScript time.
 foreign import currentTime
   :: AudioContext
   -> Effect Seconds
@@ -67,7 +67,7 @@ foreign import suspend :: AudioContext -> Effect Unit
 foreign import resume  :: AudioContext -> Effect Unit
 
 -- | Closes the audio context, releasing any system audio resources used by the BaseAudioContext.
--- | todo: close :: ..
+foreign import close   :: AudioContext -> Effect Unit
 
 -- | A property used to set the EventHandler for an event that is dispatched to BaseAudioContext
 -- | when the state of the AudioContext has changed (i.e. when the corresponding promise would have resolved).
