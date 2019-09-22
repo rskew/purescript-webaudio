@@ -8,7 +8,10 @@ module Audio.WebAudio.BiquadFilterNode
 
 import Audio.WebAudio.Types
 import Audio.WebAudio.Utils (unsafeGetProp, unsafeSetProp)
-import Prelude (class Show, class Eq, class Ord, Unit, show, (<$>))
+import Prelude (class Show, class Eq, class Ord, Unit, show, (<$>), (#))
+import Data.Generic.Rep (class Generic)
+import Foreign.Class (class Encode, class Decode)
+import Foreign.Generic (defaultOptions, genericEncode, genericDecode)
 
 import Effect (Effect)
 
@@ -24,15 +27,23 @@ data BiquadFilterType =
   | Notch
   | Allpass
 
+derive instance genericBiquadFilterType :: Generic BiquadFilterType _
+
+instance encodeBiquadFilterType :: Encode BiquadFilterType where
+  encode x = x # genericEncode defaultOptions
+
+instance decodeBiquadFilterType :: Decode BiquadFilterType where
+  decode x = x # genericDecode defaultOptions
+
 instance biquadFilterTypeShow :: Show BiquadFilterType where
-    show Lowpass   = "lowpass"
-    show Highpass  = "highpass"
-    show Bandpass  = "bandpass"
-    show Lowshelf  = "lowshelf"
-    show Highshelf = "highshelf"
-    show Peaking   = "peaking"
-    show Notch     = "notch"
-    show Allpass   = "allpass"
+  show Lowpass   = "lowpass"
+  show Highpass  = "highpass"
+  show Bandpass  = "bandpass"
+  show Lowshelf  = "lowshelf"
+  show Highshelf = "highshelf"
+  show Peaking   = "peaking"
+  show Notch     = "notch"
+  show Allpass   = "allpass"
 
 derive instance eqBiquadFilterType :: Eq BiquadFilterType
 derive instance ordBiquadFilterType :: Ord BiquadFilterType
